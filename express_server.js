@@ -66,6 +66,15 @@ app.post("/urls", (req, res) => {
 
 // Start the server and listen on the specified port
 
+// Add a delete route
+app.post("/urls/:id/delete", (req, res) => {
+  const URLid = req.params.id;
+
+  delete urlDatabase[URLid];
+
+  res.redirect("/urls");
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port: ${PORT}!`);
 });
