@@ -75,6 +75,14 @@ app.get("/urls/:id/edit", (req, res) => {
   res.render("edit-form", templateVars);
 });
 
+// adding route to update URL
+app.post("/urls/:id", (req, res) => {
+  const updateId = req.params.id;
+  const newURL = req.body.longURL;
+  urlDatabase[updateId] = newURL;
+  res.redirect("/urls");
+});
+
 
 // Add a delete route
 app.post("/urls/:id/delete", (req, res) => {
