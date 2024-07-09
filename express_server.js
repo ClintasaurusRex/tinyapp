@@ -1,9 +1,15 @@
 
 const express = require("express");
 const app = express();
+// const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
 app.set("view engine", "ejs");
+
+// Middleware to parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// app.use(cookieParser())
 
 const generateRandomString = function() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -20,8 +26,8 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com",
 };
 
-// Middleware to parse URL-encoded bodies (as sent by HTML forms)
-app.use(express.urlencoded({ extended: true }));
+
+
 
 app.get("/urls", (req, res) => {
   const templateVars = {urls: urlDatabase};
@@ -64,7 +70,15 @@ app.post("/urls", (req, res) => {
   // res.redirect('/urls')
 });
 
-// Adding the update route
+// add a Login Route
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  console.log('Received username:', username);
+  res.cookie('username', username);
+  res.redirect('/urls');
+});
+
+// Adding the edit route
 app.get("/urls/:id/edit", (req, res) => {
   const editId = req.params.id;
 
@@ -89,7 +103,12 @@ app.post("/urls/:id/delete", (req, res) => {
   const id = req.params.id;
 
   delete urlDatabase[id];
-
+  // add a Login Route
+  app.post('/login', (req, res) => {
+    const username = req.body.username;
+    res.cookie('username', username);
+    res.redirect('/urls');
+  });
   res.redirect("/urls");
 });
 
