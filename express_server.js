@@ -1,15 +1,15 @@
 
 const express = require("express");
 const app = express();
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const PORT = 8080;
-
 app.set("view engine", "ejs");
+
 
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cookieParser())
+app.use(cookieParser());
 
 const generateRandomString = function() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -30,20 +30,34 @@ const urlDatabase = {
 
 
 app.get("/urls", (req, res) => {
-  const templateVars = {urls: urlDatabase};
+  const templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"],
+  };
+  res.cookie('username', templateVars);
   res.render("urls_index", templateVars);
 });
 
 // Renders the form to create a new short URL
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = {
+    username: req.cookies["username"],
+  };
+  res.cookie('username', templateVars);
+  res.render("urls_new", templateVars);
 });
 
 // Renders the page for a specific short URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = urlDatabase[id];
-  const templateVars = { id: id, longURL: longURL };
+
+  const templateVars = {
+    id: id,
+    longURL: longURL,
+    username: req.cookies["username"],
+  };
+  res.cookie('username', templateVars);
   res.render("urls_show", templateVars);
 });
 
@@ -73,6 +87,7 @@ app.post("/urls", (req, res) => {
 // add a Login Route
 app.post('/login', (req, res) => {
   const username = req.body.username;
+
   console.log('Received username:', username);
   res.cookie('username', username);
   res.redirect('/urls');
@@ -84,8 +99,10 @@ app.get("/urls/:id/edit", (req, res) => {
 
   const templateVars = {
     editId: editId,
-    urlDatabase: urlDatabase[editId]
+    urlDatabase: urlDatabase[editId],
+    username: req.cookies["username"],
   };
+  res.cookie('username', templateVars);
   res.render("edit-form", templateVars);
 });
 
