@@ -64,17 +64,28 @@ app.post("/urls", (req, res) => {
   // res.redirect('/urls')
 });
 
-// Start the server and listen on the specified port
+// Adding the update route
+app.get("/urls/:id/edit", (req, res) => {
+  const editId = req.params.id;
+
+  const templateVars = {
+    editId: editId,
+    urlDatabase: urlDatabase[editId]
+  };
+  res.render("edit-form", templateVars);
+});
+
 
 // Add a delete route
 app.post("/urls/:id/delete", (req, res) => {
-  const URLid = req.params.id;
+  const id = req.params.id;
 
-  delete urlDatabase[URLid];
+  delete urlDatabase[id];
 
   res.redirect("/urls");
 });
 
+// Start the server and listen on the specified port
 app.listen(PORT, () => {
   console.log(`Example app listening on port: ${PORT}!`);
 });
@@ -83,6 +94,3 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
