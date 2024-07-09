@@ -8,8 +8,8 @@ app.set("view engine", "ejs");
 const generateRandomString = function() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = "";
-  for (const i = 0; i < 6; i++) {
-    result += chars.charAt(Math.floor(Math.random() + chars.length));
+  for (let i = 0; i < 6; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
 };
@@ -20,6 +20,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com",
 };
 
+// Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/urls", (req, res) => {
@@ -27,10 +28,12 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// Renders the form to create a new short URL
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+// Renders the page for a specific short URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = urlDatabase[id];
@@ -38,11 +41,31 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+// Redirects to the long URL associated with the given short URL
+app.get("/u/:id", (req, res) => {
+  const shortURL = req.params.id;
+  const longURL = urlDatabase[shortURL];
+
+  if (longURL) {
+    res.redirect(longURL);
+  } else {
+    res.status(404).send("ShortURL not found");
+  }
 });
 
+
+// Creates a new short URL and adds it to the urlDatabase
+app.post("/urls", (req, res) => {
+  const shortURL = generateRandomString();
+  console.log("Generated shortURL:", shortURL);
+  const longURL = req.body.longURL;
+  urlDatabase[shortURL] = longURL;
+  res.redirect(`/urls/${shortURL}`);
+
+  // res.redirect('/urls')
+});
+
+// Start the server and listen on the specified port
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port: ${PORT}!`);
