@@ -53,7 +53,6 @@ app.get("/urls/:id", (req, res) => {
     id: id,
     longURL: longURL,
   };
-  res.cookie('username', templateVars);
   res.render("urls_show", templateVars);
 });
 
@@ -96,9 +95,7 @@ app.get("/urls/:id/edit", (req, res) => {
   const templateVars = {
     editId: editId,
     urlDatabase: urlDatabase[editId],
-    username: req.cookies["username"],
   };
-  res.cookie('username', templateVars);
   res.render("edit-form", templateVars);
 });
 
