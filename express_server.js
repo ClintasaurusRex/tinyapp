@@ -1,6 +1,11 @@
 
 const express = require("express");
 const cookieParser = require('cookie-parser');
+const {
+  generateRandomString,
+  getUserByEmail,
+  getUserFromCookie,
+} = require('./helpers/functions');
 
 const app = express();
 const PORT = 8080;
@@ -17,16 +22,7 @@ const urlDatabase = {
   b2xVn2: "http//:www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
-
-// Generate random string
-const generateRandomString = function() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result = "";
-  for (let i = 0; i < 6; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-};
+;
 
 // Users object
 const users = {
@@ -40,11 +36,6 @@ const users = {
     email:    "boomStick@evilDead.com",
     password: "boomstick",
   }
-};
-
-const getUserFromCookie = function(req) {
-  const userID = req.cookies["user_id"];
-  return users[userID] || null;
 };
 
 
@@ -124,19 +115,14 @@ app.get("/register", (req, res) => {
   res.render("register", templateVars);
 });
 
-
 // register
 app.post("/register", (req, res) => {
-
   const { email, password } = req.body;
-
+  const existingUser = getUserByEmail(email);
 
   if (!email || !password)  {
-    return res.status(404).send("Email and password cannot be MT");
+    return res.status(404).send("Email and password cannot be empty");
   }
-
-  const existingUser = Object.values(users).find(user => user.email === email);
-
 
   if (existingUser) {
     return res.status(400).send("Email exists already");
