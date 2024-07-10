@@ -1,16 +1,24 @@
 
 const express = require("express");
-const app = express();
 const cookieParser = require('cookie-parser');
+
+const app = express();
 const PORT = 8080;
+
+
 app.set("view engine", "ejs");
-
-
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+
+const urlDatabase = {
+  b2xVn2: "http//:www.lighthouselabs.ca",
+  "9sm5xK": "http://www.google.com",
+};
+
+// Generate random string
 const generateRandomString = function() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = "";
@@ -20,27 +28,40 @@ const generateRandomString = function() {
   return result;
 };
 
+// Users object
+const users = {
+  userRandomID: {
+    id:       "user@FBI.com",
+    email:    "hannibal@FBI.com",
+    password: "i-eat-people",
+  },
+  user2RandomID: {
+    id:       "ashWilliamsID",
+    email:    "boomStick@evilDead.com",
+    password: "boomstick",
+  }
+};
 
-const urlDatabase = {
-  b2xVn2: "http//:www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
+const getUserFromCookie = function(req) {
+  const userID = req.cookies["user_id"];
+  return users[userID] || null;
 };
 
 
-
-
 app.get("/urls", (req, res) => {
+  const user = getUserFromCookie(req);
   const templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: user,
   };
   res.render("urls_index", templateVars);
 });
 
 // Renders the form to create a new short URL
 app.get("/urls/new", (req, res) => {
+  const user = getUserFromCookie(req);
   const templateVars = {
-    username: req.cookies["username"],
+    user: user,
   };
   res.render("urls_new", templateVars);
 });
@@ -96,10 +117,40 @@ app.post('/logout', (req, res) => {
 
 // Make a registration
 app.get("/register", (req, res) => {
+  const user = getUserFromCookie(req);
   const templateVars = {
-    username: req.cookies["username"]
+    user: user,
   };
   res.render("register", templateVars);
+});
+
+
+// register
+app.post("/register", (req, res) => {
+
+  const { email, password } = req.body;
+
+
+  if (!email || !password)  {
+    return res.status(404).send("Email and password cannot be MT");
+  }
+
+  const existingUser = Object.values(users).find(user => user.email === email);
+
+
+  if (existingUser) {
+    return res.status(400).send("Email exists already");
+  }
+
+  const id = generateRandomString();
+
+  users[id] = { id, email, password };
+
+  console.log("Updated Users Object: ", users);
+
+  res.cookie('user_id', id);
+  res.redirect("/urls");
+
 });
 
 
@@ -130,6 +181,7 @@ app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[id];
   res.redirect('/urls');
 });
+
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
