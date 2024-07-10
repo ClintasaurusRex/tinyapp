@@ -1,6 +1,7 @@
 
 const express = require("express");
 const cookieParser = require('cookie-parser');
+const users = require('./data/userData');
 const {
   generateRandomString,
   getUserByEmail,
@@ -21,21 +22,6 @@ app.use(cookieParser());
 const urlDatabase = {
   b2xVn2: "http//:www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
-};
-;
-
-// Users object
-const users = {
-  userRandomID: {
-    id:       "user@FBI.com",
-    email:    "hannibal@FBI.com",
-    password: "i-eat-people",
-  },
-  user2RandomID: {
-    id:       "ashWilliamsID",
-    email:    "boomStick@evilDead.com",
-    password: "boomstick",
-  }
 };
 
 
@@ -91,6 +77,14 @@ app.post("/urls", (req, res) => {
 
   // res.redirect('/urls')
 });
+// create a get /login endpoint that respons with new template
+app.get("/login", (req, res) => {
+  const user = getUserFromCookie(req);
+  const templateVars = {
+    user: user,
+  };
+  res.render("login", templateVars);
+});
 
 // add a Login Route
 app.post('/login', (req, res) => {
@@ -120,10 +114,11 @@ app.post("/register", (req, res) => {
   const { email, password } = req.body;
   const existingUser = getUserByEmail(email);
 
+  // check if user doesnt fill in the fields
   if (!email || !password)  {
     return res.status(400).send("Email and password cannot be empty");
   }
-
+  // check if the user already exists
   if (existingUser) {
     return res.status(400).send("Email exists already");
   }

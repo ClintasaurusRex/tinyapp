@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    button {
+  background-color: #138496;  /* Darker shade for hover effect */
+  cursor: pointer;  /* Changes cursor to hand icon on hover */
+  margin-top: 20px;
+  margin-left: 100px;
+  }
+  button:hover {
+    background-color: red;
+    transform: scale(1.5)
+  }
+  #email {
+    margin-left: 31px
+  }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+  <% if (user) { %>
+    <form class="form-inline" method="POST" action="/logout">
+      <div class="mr-2">Logged in as: <%= user.email %></div>
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+  <% } else { %>
+    <form class="form-inline" action="/login" method="POST">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  <% } %>
+</body>
+</html>
