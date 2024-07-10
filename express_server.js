@@ -94,6 +94,14 @@ app.post('/logout', (req, res) => {
   res.redirect('/urls');
 });
 
+// Make a registration
+app.get("/register", (req, res) => {
+  const templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("register", templateVars);
+});
+
 
 // Adding the edit route
 app.get("/urls/:id/edit", (req, res) => {
