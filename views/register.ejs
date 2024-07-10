@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
+  <style>
+    button {
+  background-color: #138496;  /* Darker shade for hover effect */
+  cursor: pointer;  /* Changes cursor to hand icon on hover */
+  margin-top: 20px;
+  margin-left: 100px;
+  }
+  button:hover {
+    background-color: red;
+    transform: scale(1.5)
+  }
+  #email {
+    margin-left: 31px
+  }
+  </style>
 </head>
 <body>
   <h1>Create your Account</h1>
@@ -12,12 +27,13 @@
   <form method="POST" action="/register">
     <div>
       <label for="email"><b>Email:</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
+      <input id="email" type="text" placeholder="Enter Email" name="email" required>
     </div>
     <div>
       <label for="Password"><b>Password:</b></label>
       <input type="text" placeholder="Enter Password" name="password" required>
     </div>
+    <button type="submit" class="btn btn-info">Submit</button>
   </form>
 </body>
 </html>
