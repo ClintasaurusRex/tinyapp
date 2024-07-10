@@ -88,10 +88,10 @@ app.get("/login", (req, res) => {
 
 // add a Login Route
 app.post('/login', (req, res) => {
-  const username = req.body.username;
+  const email = req.body.email;
 
-  console.log('Received username:', username);
-  res.cookie('username', username);
+  console.log('Received email:', email);
+  res.cookie('email', email);
   res.redirect('/urls');
 });
 // Logout
