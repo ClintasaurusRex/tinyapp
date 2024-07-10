@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
   <style>
     button {
-  background-color: #138496;  /* Darker shade for hover effect */
-  cursor: pointer;  /* Changes cursor to hand icon on hover */
-  margin-top: 20px;
-  margin-left: 100px;
-  }
-  button:hover {
-    background-color: red;
-    transform: scale(1.5)
-  }
-  #email {
-    margin-left: 31px
-  }
+      background-color: #138496;
+      /* Darker shade for hover effect */
+      cursor: pointer;
+      /* Changes cursor to hand icon on hover */
+      margin-top: 20px;
+      margin-left: 50px;
+    }
+
+    button:hover {
+      background-color: red;
+      transform: scale(1.5)
+    }
   </style>
 </head>
+
 <body>
   <h1>Create your Account</h1>
   <p>Please fill in form to create an account</p>
@@ -27,14 +29,18 @@
   <form method="POST" action="/register">
     <div>
       <label for="email"><b>Email:</b></label>
-      <input id="email" type="email" placeholder="Enter Email" name="email" required>
+      <div>
+        <input id="email" type="email" placeholder="Enter Email" name="email" required>
+      </div>
     </div>
     <div>
       <label for="password"><b>Password:</b></label>
-      <input id="password" type="password" placeholder="Enter Password" name="password" required>
+      <div>
+        <input id="password" type="password" placeholder="Enter Password" name="password" required>
+      </div>
     </div>
-    <button type="submit" class="btn btn-info">Submit</button>
+    <button type="submit" class="btn btn-info">Register</button>
   </form>
 </body>
-</html>
 
+</html>

@@ -1,12 +1,12 @@
 
 // Users object
 const users = {
-  userRandomID: {
+  "user@FBI.com": {
     id:       "user@FBI.com",
     email:    "hannibal@FBI.com",
     password: "i-eat-people",
   },
-  user2RandomID: {
+  "ashWilliamsID": {
     id:       "ashWilliamsID",
     email:    "boomStick@evilDead.com",
     password: "boomstick",

@@ -100,16 +100,14 @@ app.post('/login', (req, res) => {
     return res.status(403).send("Incorrect password");
   }
 
-  console.log('Received email:', email);
-  // If both checks pass
   res.cookie('user_id', user.id);
   res.redirect('/urls');
 });
 
 // Logout
 app.post('/logout', (req, res) => {
-  res.clearCookie('username');
-  res.redirect('/login');
+  res.clearCookie('user_id');
+  res.redirect('/urls');
 });
 
 // Make a registration
