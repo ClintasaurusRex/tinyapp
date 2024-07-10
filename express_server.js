@@ -121,7 +121,7 @@ app.post("/register", (req, res) => {
   const existingUser = getUserByEmail(email);
 
   if (!email || !password)  {
-    return res.status(404).send("Email and password cannot be empty");
+    return res.status(400).send("Email and password cannot be empty");
   }
 
   if (existingUser) {
