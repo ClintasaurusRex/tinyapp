@@ -67,9 +67,9 @@ app.get("/u/:id", (req, res) => {
   }
 });
 
-
 // Creates a new short URL and adds it to the urlDatabase
 app.post("/urls", (req, res) => {
+
   const shortURL = generateRandomString();
   const longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
@@ -77,6 +77,7 @@ app.post("/urls", (req, res) => {
 
   // res.redirect('/urls')
 });
+
 // create a get /login endpoint that respons with new template
 app.get("/login", (req, res) => {
   const user = getUserFromCookie(req);
@@ -88,16 +89,27 @@ app.get("/login", (req, res) => {
 
 // add a Login Route
 app.post('/login', (req, res) => {
-  const email = req.body.email;
+  const { email, password } = req.body;
+  // find email
+  const user = getUserByEmail(email);
+  //check it user and passwords match
+  if (!user) {
+    return res.status(403).send("Invalid Email");
+  }
+  if (user.password !== password) {
+    return res.status(403).send("Incorrect password");
+  }
 
   console.log('Received email:', email);
-  res.cookie('email', email);
+  // If both checks pass
+  res.cookie('user_id', user.id);
   res.redirect('/urls');
 });
+
 // Logout
 app.post('/logout', (req, res) => {
   res.clearCookie('username');
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 // Make a registration
@@ -116,11 +128,11 @@ app.post("/register", (req, res) => {
 
   // check if user doesnt fill in the fields
   if (!email || !password)  {
-    return res.status(400).send("Email and password cannot be empty");
+    return res.status(403).send("Email and password cannot be empty");
   }
   // check if the user already exists
   if (existingUser) {
-    return res.status(400).send("Email exists already");
+    return res.status(403).send("Email exists already");
   }
 
   const id = generateRandomString();
