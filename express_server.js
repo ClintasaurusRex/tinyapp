@@ -54,9 +54,9 @@ app.post("/urls", (req, res) => {
 
 
   const shortURL = generateRandomString();
-  const longURL = req.body.longURL;
+  const dataURL = req.body.longURL;
   urlDatabase[shortURL] = {
-    longURL: longURL,
+    dataURL: dataURL.longURL,
     userID: user.id,
   };
 
@@ -69,14 +69,16 @@ app.post("/urls", (req, res) => {
 // Renders the page for a specific short URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
-  const longURL = urlDatabase[id];
+  const dataURL = urlDatabase[id];
   const user = getUserFromCookie(req);
 
-
+  if (!dataURL) {
+    return res.status(404).send("URL not found");
+  }
 
   const templateVars = {
     id: id,
-    longURL: longURL,
+    longURL: dataURL.longURL,
     user: user,
   };
   res.render("urls_show", templateVars);
