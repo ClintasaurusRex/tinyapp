@@ -194,7 +194,7 @@ app.post("/register", (req, res) => {
 
   users[id] = { id, email, password: hashedPass };//===========
 
-  console.log("Updated Users Object: ", users);
+  // console.log("Updated Users Object: ", users);
 
   req.session.user_id = id;
   res.redirect("/urls");
@@ -225,13 +225,13 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
-// adding route to update URL
-app.post("/urls/:id", (req, res) => {
-  const updateId = req.params.id;
-  const newURL = req.body.longURL;
-  urlDatabase[updateId] = newURL;
-  res.redirect("/urls");
-});
+// // adding route to update URL
+// app.post("/urls/:id", (req, res) => {
+//   const updateId = req.params.id;
+//   const newURL = req.body.longURL;
+//   urlDatabase[updateId] = newURL;===========may remove
+//   res.redirect("/urls");
+// });
 
 
 // Add a delete route
