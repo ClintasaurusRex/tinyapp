@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(express.json()); // Parse JSON bodies
 app.use(cookieParser()); // Parse cookies
 
-// Define the initial URL database
+// Define the initial URL databaseb
 const urlDatabase = {
   b2xVn2: "http//:www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",

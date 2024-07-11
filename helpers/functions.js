@@ -12,8 +12,8 @@ const generateRandomString = function() {
 };
 
 const getUserFromCookie = function(req) {
-  const userID = req.cookies["user_id"];
-  return users[userID] || null;
+  const userID = req.session.user_id;
+  return users[req.session.user_id] || null;
 };
 
 // Helper Function to find a user by email

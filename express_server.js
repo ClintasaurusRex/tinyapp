@@ -1,6 +1,7 @@
 
 const express = require("express");
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 const users = require('./data/userData');
 const {
@@ -17,8 +18,12 @@ app.set("view engine", "ejs");
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
-"user@FBI.com";
+// app.use(cookieParser());
+
+app.use(cookieSession({
+  name: 'session',
+  keys: [process.env.SESSION_KEY1, process.env.SESSION_KEY2]
+}));
 
 const urlDatabase = {
   b2xVn2: {
@@ -150,13 +155,13 @@ app.post('/login', (req, res) => {
     return res.status(403).send("Incorrect password");
   }
 
-  res.cookie('user_id', user.id);
+  req.session.user_id = user.id;
   res.redirect('/urls');
 });
 
 // Logout
 app.post('/logout', (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect('/login');
 });
 
@@ -191,7 +196,7 @@ app.post("/register", (req, res) => {
 
   console.log("Updated Users Object: ", users);
 
-  res.cookie('user_id', id);
+  req.session.user_id = id;
   res.redirect("/urls");
 
 });
