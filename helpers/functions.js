@@ -12,13 +12,13 @@ const generateRandomString = function() {
 };
 
 const getUserFromCookie = function(req) {
-  const userID = req.session.user_id;
+  // const userID = req.session.user_id;
   return users[req.session.user_id] || null;
 };
 
 // Helper Function to find a user by email
-const getUserByEmail = function(email) {
-  return Object.values(users).find(user => user.email === email);
+const getUserByEmail = function(email, database) {
+  return Object.values(database).find(user => user.email === email);
 
 };
 

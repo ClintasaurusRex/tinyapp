@@ -17,12 +17,11 @@ app.set("view engine", "ejs");
 
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 // app.use(cookieParser());
 
 app.use(cookieSession({
   name: 'session',
-  keys: [process.env.SESSION_KEY1, process.env.SESSION_KEY2]
+  keys: ["Hello"]
 }));
 
 const urlDatabase = {
@@ -54,8 +53,9 @@ const urlsForUser = (id) => {
 app.get("/urls", (req, res) => {
   const user = getUserFromCookie(req);
 
+
   if (!user) {
-    return res.status(403).send("Please log in or register to view URLs.");
+    return res.status(403).send("Please log in or register to view URLs.!!!!!!!!!!");
   }
 
   const userURLs = urlsForUser(user.id);
@@ -224,14 +224,6 @@ app.post("/urls/:id", (req, res) => {
   urlDatabase[id].longURL = longURL;
   res.redirect("/urls");
 });
-
-// // adding route to update URL
-// app.post("/urls/:id", (req, res) => {
-//   const updateId = req.params.id;
-//   const newURL = req.body.longURL;
-//   urlDatabase[updateId] = newURL;===========may remove
-//   res.redirect("/urls");
-// });
 
 
 // Add a delete route
