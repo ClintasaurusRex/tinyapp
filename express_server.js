@@ -33,24 +33,51 @@ app.get("/urls", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
-
 // Renders the form to create a new short URL
 app.get("/urls/new", (req, res) => {
   const user = getUserFromCookie(req);
+  if (!user) {
+    return res.redirect('/login');
+  }
+
   const templateVars = {
     user: user,
   };
   res.render("urls_new", templateVars);
 });
+// Creates a new short URL and adds it to the urlDatabase
+app.post("/urls", (req, res) => {
+  const user = getUserFromCookie(req);
+  if (!user) {
+    return res.status(403).send("must be logged in\n");
+  }
+
+
+  const shortURL = generateRandomString();
+  const longURL = req.body.longURL;
+  urlDatabase[shortURL] = {
+    longURL: longURL,
+    userID: user.id,
+  };
+
+  res.redirect(`/urls/${shortURL}`);
+
+  // res.redirect('/urls')
+});
+
 
 // Renders the page for a specific short URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = urlDatabase[id];
+  const user = getUserFromCookie(req);
+
+
 
   const templateVars = {
     id: id,
     longURL: longURL,
+    user: user,
   };
   res.render("urls_show", templateVars);
 });
@@ -67,20 +94,13 @@ app.get("/u/:id", (req, res) => {
   }
 });
 
-// Creates a new short URL and adds it to the urlDatabase
-app.post("/urls", (req, res) => {
-
-  const shortURL = generateRandomString();
-  const longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
-  res.redirect(`/urls/${shortURL}`);
-
-  // res.redirect('/urls')
-});
 
 // create a get /login endpoint that respons with new template
 app.get("/login", (req, res) => {
   const user = getUserFromCookie(req);
+  if (user) {
+    return res.redirect("./urls");
+  }
   const templateVars = {
     user: user,
   };
@@ -113,6 +133,10 @@ app.post('/logout', (req, res) => {
 // Make a registration
 app.get("/register", (req, res) => {
   const user = getUserFromCookie(req);
+  // check if user is logged in and redirect
+  if (user) {
+    return res.redirect("./urls");
+  }
   const templateVars = {
     user: user,
   };
