@@ -6,7 +6,6 @@ const {
   generateRandomString,
   getUserByEmail,
   getUserFromCookie,
-  urlsForUSer,
 } = require('./helpers/functions');
 
 const app = express();

@@ -22,11 +22,11 @@ const getUserByEmail = function(email) {
 
 };
 
-// URLs for user
-//defien the function
-const urlsForUSer = function(id) {
-  //init an MT object
-  const userURLs = {};
+// // URLs for user
+// //defien the function
+// const urlsForUSer = function(id) {
+//   //init an MT object
+//   const userURLs = {};
 
 //   //Iterate through each url in the urlDatabase
 //   for (const urlId in urlDatabase)  {
@@ -48,4 +48,4 @@ const urlsForUSer = function(id) {
 // We keep doing this until we've checked all the boxes.
 // Finally, we hand over our basket full of our boxes.
 
-module.exports = { generateRandomString, getUserFromCookie, getUserByEmail, urlsForUSer };
+module.exports = { generateRandomString, getUserFromCookie, getUserByEmail, };
