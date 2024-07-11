@@ -47,10 +47,12 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = urlDatabase[id];
+  const user = getUserFromCookie(req);
 
   const templateVars = {
     id: id,
     longURL: longURL,
+    user: user
   };
   res.render("urls_show", templateVars);
 });
