@@ -56,7 +56,7 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const dataURL = req.body.longURL;
   urlDatabase[shortURL] = {
-    dataURL: dataURL.longURL,
+    longURL: dataURL,
     userID: user.id,
   };
 
@@ -66,22 +66,20 @@ app.post("/urls", (req, res) => {
 });
 
 
-// Renders the page for a specific short URL
+// Route to display a specific URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   const dataURL = urlDatabase[id];
-  const user = getUserFromCookie(req);
-
+  const user = getUserFromCookie(req); // Get user from cookie
   if (!dataURL) {
-    return res.status(404).send("URL not found");
+    return res.status(404).send("URL not found"); // Return 404 if URL not found
   }
-
   const templateVars = {
     id: id,
     longURL: dataURL.longURL,
     user: user,
   };
-  res.render("urls_show", templateVars);
+  res.render("urls_show", templateVars); // Render the URL details page
 });
 
 // Redirects to the long URL associated with the given short URL
@@ -163,7 +161,7 @@ app.post("/register", (req, res) => {
 
   users[id] = { id, email, password };
 
-  console.log("Updated Users Object: ", users);
+  // console.log("Updated Users Object: ", users);
 
   res.cookie('user_id', id);
   res.redirect("/urls");
@@ -187,6 +185,7 @@ app.post("/urls/:id", (req, res) => {
   const updateId = req.params.id;
   const newURL = req.body.longURL;
   urlDatabase[updateId] = newURL;
+
   res.redirect("/urls");
 });
 
