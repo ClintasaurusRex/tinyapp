@@ -71,6 +71,7 @@ app.get("/urls/new", (req, res) => {
   };
   res.render("urls_new", templateVars);
 });
+<<<<<<< HEAD
 // Creates a new short URL and adds it to the urlDatabase
 app.post("/urls", (req, res) => {
   const user = getUserFromCookie(req);
@@ -88,8 +89,65 @@ app.post("/urls", (req, res) => {
   };
 
   res.redirect(`/urls/${shortURL}`);
+=======
 
-  // res.redirect('/urls')
+
+// Renders the page for a specific short URL-----------------------------------*
+app.get("/urls/:id", (req, res) => {
+  const id = req.params.id;
+  const { longURL } = req.body;
+  const urlEntry = urlDatabase[id];
+  const user = getUserFromCookie(req);
+
+  if (!user) {
+    return res.status(403).send("Please log in to view this URL");
+  }
+
+  if (!urlEntry) {
+    return res.status(404).send("URL NOT FOUND");
+  }
+
+  if (urlEntry.userID !== user.id) {
+    return res.send(403).send("This URL doesnt belong to you!");
+  }
+
+  const templateVars = {
+    id: id,
+    longURL: urlEntry.longURL,
+    user: user
+  };
+  urlDatabase[id].longURL = longURL;
+  res.render("urls_show", templateVars);
+});
+
+// Redirects to the long URL associated with the given short URL=============
+app.get("/u/:id", (req, res) => {
+  const shortURL = req.params.id;
+  const urlEntry = urlDatabase[shortURL];
+
+  if (urlEntry) {
+    res.redirect(urlEntry.longURL);
+  } else {
+    res.status(404).send("ShortURL not found");
+  }
+});
+
+// Creates a new short URL and adds it to the urlDatabase===================
+app.post("/urls", (req, res) => {
+  const shortURL = generateRandomString();
+  const longURL = req.body.longURL;
+  const user = getUserFromCookie(req);
+>>>>>>> feature/user-registration
+
+  if (user) {
+    urlDatabase[shortURL] = {
+      longURL: longURL,
+      userID: user.id
+    };
+    res.redirect(`/urls/${shortURL}`);
+  } else {
+    res.status(403).send("You must be logged in to create new URLs.");
+  }
 });
 
 
