@@ -74,7 +74,7 @@ app.get("/urls/new", (req, res) => {
 // Renders the page for a specific short URL-----------------------------------*
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
-  const { longURL } = req.body;
+  // const { longURL } = req.body;
   const urlEntry = urlDatabase[id];
   const user = getUserFromCookie(req);
 
@@ -95,7 +95,7 @@ app.get("/urls/:id", (req, res) => {
     longURL: urlEntry.longURL,
     user: user
   };
-  urlDatabase[id].longURL = longURL;
+  // urlDatabase[id].longURL = longURL;
   res.render("urls_show", templateVars);
 });
 
