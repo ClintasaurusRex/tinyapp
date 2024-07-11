@@ -6,6 +6,7 @@ const {
   generateRandomString,
   getUserByEmail,
   getUserFromCookie,
+  urlsForUSer,
 } = require('./helpers/functions');
 
 const app = express();
@@ -59,37 +60,15 @@ app.get("/urls", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
+
 // Renders the form to create a new short URL
 app.get("/urls/new", (req, res) => {
   const user = getUserFromCookie(req);
-  if (!user) {
-    return res.redirect('/login');
-  }
-
   const templateVars = {
     user: user,
   };
   res.render("urls_new", templateVars);
 });
-<<<<<<< HEAD
-// Creates a new short URL and adds it to the urlDatabase
-app.post("/urls", (req, res) => {
-  const user = getUserFromCookie(req);
-  if (!user) {
-    return res.status(403).send("must be logged in\n");
-  }
-
-
-<<<<<<< HEAD
-  const shortURL = generateRandomString();
-  const dataURL = req.body.longURL;
-  urlDatabase[shortURL] = {
-    longURL: dataURL,
-    userID: user.id,
-  };
-
-  res.redirect(`/urls/${shortURL}`);
-=======
 
 
 // Renders the page for a specific short URL-----------------------------------*
@@ -137,7 +116,6 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const longURL = req.body.longURL;
   const user = getUserFromCookie(req);
->>>>>>> feature/user-registration
 
   if (user) {
     urlDatabase[shortURL] = {
@@ -149,90 +127,10 @@ app.post("/urls", (req, res) => {
     res.status(403).send("You must be logged in to create new URLs.");
   }
 });
-
-
-// Route to display a specific URL
-app.get("/urls/:id", (req, res) => {
-  const id = req.params.id;
-  const dataURL = urlDatabase[id];
-  const user = getUserFromCookie(req); // Get user from cookie
-  if (!dataURL) {
-    return res.status(404).send("URL not found"); // Return 404 if URL not found
-  }
-  const templateVars = {
-    id: id,
-    longURL: dataURL.longURL,
-    user: user,
-  };
-  res.render("urls_show", templateVars); // Render the URL details page
-=======
-// Renders the page for a specific short URL-----------------------------------*
-app.get("/urls/:id", (req, res) => {
-  const id = req.params.id;
-  const { longURL } = req.body;
-  const urlEntry = urlDatabase[id];
-  const user = getUserFromCookie(req);
-
-  if (!user) {
-    return res.status(403).send("Please log in to view this URL");
-  }
-
-  if (!urlEntry) {
-    return res.status(404).send("URL NOT FOUND");
-  }
-
-  if (urlEntry.userID !== user.id) {
-    return res.send(403).send("This URL doesnt belong to you!");
-  }
-
-  const templateVars = {
-    id: id,
-    longURL: urlEntry.longURL,
-    user: user
-  };
-  urlDatabase[id].longURL = longURL;
-  res.render("urls_show", templateVars);
->>>>>>> feature/user-registration
-});
-
-// Redirects to the long URL associated with the given short URL=============
-app.get("/u/:id", (req, res) => {
-  const shortURL = req.params.id;
-  const urlEntry = urlDatabase[shortURL];
-
-  if (urlEntry) {
-    res.redirect(urlEntry.longURL);
-  } else {
-    res.status(404).send("ShortURL not found");
-  }
-});
-
-<<<<<<< HEAD
-=======
-// Creates a new short URL and adds it to the urlDatabase===================
-app.post("/urls", (req, res) => {
-  const shortURL = generateRandomString();
-  const longURL = req.body.longURL;
-  const user = getUserFromCookie(req);
-
-  if (user) {
-    urlDatabase[shortURL] = {
-      longURL: longURL,
-      userID: user.id
-    };
-    res.redirect(`/urls/${shortURL}`);
-  } else {
-    res.status(403).send("You must be logged in to create new URLs.");
-  }
-});
->>>>>>> feature/user-registration
 
 // create a get /login endpoint that respons with new template
 app.get("/login", (req, res) => {
   const user = getUserFromCookie(req);
-  if (user) {
-    return res.redirect("./urls");
-  }
   const templateVars = {
     user: user,
   };
@@ -260,16 +158,11 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id');
   res.redirect('/login');
-  res.send("Please log in to make URL!!");
 });
 
 // Make a registration
 app.get("/register", (req, res) => {
   const user = getUserFromCookie(req);
-  // check if user is logged in and redirect
-  if (user) {
-    return res.redirect("./urls");
-  }
   const templateVars = {
     user: user,
   };
@@ -294,7 +187,7 @@ app.post("/register", (req, res) => {
 
   users[id] = { id, email, password };
 
-  // console.log("Updated Users Object: ", users);
+  console.log("Updated Users Object: ", users);
 
   res.cookie('user_id', id);
   res.redirect("/urls");
@@ -330,7 +223,6 @@ app.post("/urls/:id", (req, res) => {
   const updateId = req.params.id;
   const newURL = req.body.longURL;
   urlDatabase[updateId] = newURL;
-
   res.redirect("/urls");
 });
 
