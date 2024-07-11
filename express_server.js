@@ -1,6 +1,7 @@
 
 const express = require("express");
 const cookieParser = require('cookie-parser');
+const bcrypt = require("bcryptjs");
 const users = require('./data/userData');
 const {
   generateRandomString,
@@ -145,7 +146,7 @@ app.post('/login', (req, res) => {
   if (!user) {
     return res.status(403).send("Invalid Email");
   }
-  if (user.password !== password) {
+  if (!bcrypt.compareSync(password, user.password)) {//======================
     return res.status(403).send("Incorrect password");
   }
 
@@ -183,8 +184,10 @@ app.post("/register", (req, res) => {
   }
 
   const id = generateRandomString();
+  // Hast the password
+  const hashedPass = bcrypt.hashSync(password, 10);//=========
 
-  users[id] = { id, email, password };
+  users[id] = { id, email, password: hashedPass };//===========
 
   console.log("Updated Users Object: ", users);
 
