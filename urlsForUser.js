@@ -1,13 +1,4 @@
-const urlDatabase = {
-  b2xVn2: {
-    longURL: "http//:www.lighthouselabs.ca",
-    userID:  "user@FBI.com",
-  },
-  "9sm5xK": {
-    longURL: "http://www.google.com",
-    userID:  "ashWilliamsID",
-  }
-};
+const urlDatabase = require("./data/urldataBase");
 
 const urlsForUser = (id) => {
   if (Object.keys(urlDatabase).length === 0) {
@@ -22,5 +13,3 @@ const urlsForUser = (id) => {
   }
   return userURLs;
 };
-
-module.exports = { urlDatabase, urlsForUser };

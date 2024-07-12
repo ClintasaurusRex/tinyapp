@@ -1,5 +1,4 @@
 
-// const users = require('../data/userData');
 // Helper Function to find a user by email
 const getUserByEmail = (email, userDatabase) => {
   for (const userId in userDatabase) {
@@ -10,5 +9,19 @@ const getUserByEmail = (email, userDatabase) => {
   return undefined;
 };
 
+const urlsForUser = (id, urlDatabase) => {
+  if (Object.keys(urlDatabase).length === 0) {
+    return {};
+  }
 
-module.exports = { getUserByEmail };
+  const userURLs = {};
+  for (const shortURL in urlDatabase) {
+    console.log(shortURL);
+    if (urlDatabase[shortURL].userId === id) {
+      userURLs[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return userURLs;
+};
+
+module.exports = { getUserByEmail, urlsForUser };

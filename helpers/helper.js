@@ -17,13 +17,13 @@ const getUserFromCookie = function(req) {
 };
 
 // Helper Function to find a user by email
-// const getUserByEmail = function(email, database = users) {//==========review
-//   if (!users || typeof users !== 'object') {
-//     return null;
-//   }
-//   return Object.values(database).find(user => user.email === email);
+const getUserByEmail = function(email, database = users) {//==========review
+  if (!users || typeof users !== 'object') {
+    return null;
+  }
+  return Object.values(database).find(user => user.email === email);
 
-// };
+};
 const urlsForUser = (id) => {
   const userURLs = {};
   for (const urlId in urlDatabase) {
