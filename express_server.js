@@ -18,7 +18,6 @@ app.set("view engine", "ejs");
 
 // Middleware to parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
 
 app.use(cookieSession({
   name: 'session',
@@ -35,7 +34,7 @@ const urlDatabase = {
     userID:  "ashWilliamsID",
   }
 };
-// if in http://localhost:8080/urls at this spot in the browser under long URL it says [object object] go to url_index and check <%= urls[id].longURL %>
+
 const urlsForUser = (id) => {
   const userURLs = {};
   for (const urlId in urlDatabase) {

@@ -16,7 +16,6 @@ const urlsForUser = (id, urlDatabase) => {
 
   const userURLs = {};
   for (const shortURL in urlDatabase) {
-    console.log(shortURL);
     if (urlDatabase[shortURL].userId === id) {
       userURLs[shortURL] = urlDatabase[shortURL];
     }
