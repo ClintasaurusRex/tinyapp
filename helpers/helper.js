@@ -1,4 +1,4 @@
-
+const urlDatabase = require("../data/url_Database");
 const users = require('../data/userData');
 
 // Generate random string
@@ -17,10 +17,33 @@ const getUserFromCookie = function(req) {
 };
 
 // Helper Function to find a user by email
-const getUserByEmail = function(email, database) {
-  return Object.values(database).find(user => user.email === email);
+// const getUserByEmail = function(email, database = users) {//==========review
+//   if (!users || typeof users !== 'object') {
+//     return null;
+//   }
+//   return Object.values(database).find(user => user.email === email);
 
+// };
+const urlsForUser = (id) => {
+  const userURLs = {};
+  for (const urlId in urlDatabase) {
+    if (urlDatabase[urlId].userID === id) {
+      userURLs[urlId] = urlDatabase[urlId];
+    }
+
+  }
+  return userURLs;
 };
+
+
+// const getUserByEmail = function(email, database) {
+//   for (const user in database) {
+//     if (database[user].email === email) {
+//       return database[user];
+//     }
+//   }
+// };
+
 
 // // URLs for user
 // //defien the function
@@ -48,4 +71,4 @@ const getUserByEmail = function(email, database) {
 // We keep doing this until we've checked all the boxes.
 // Finally, we hand over our basket full of our boxes.
 
-module.exports = { generateRandomString, getUserFromCookie, getUserByEmail, };
+module.exports = { generateRandomString, getUserFromCookie, getUserByEmail, urlsForUser };

@@ -4,11 +4,12 @@ const express = require("express");
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 const users = require('./data/userData');
+// const urlDatabase = require("./data/url_Database");
 const {
   generateRandomString,
   getUserByEmail,
   getUserFromCookie,
-} = require('./helpers/functions');
+} = require('./helpers/helper');
 
 const app = express();
 const PORT = 8080;
@@ -33,11 +34,8 @@ const urlDatabase = {
     longURL: "http://www.google.com",
     userID:  "ashWilliamsID",
   }
-
 };
 // if in http://localhost:8080/urls at this spot in the browser under long URL it says [object object] go to url_index and check <%= urls[id].longURL %>
-
-
 const urlsForUser = (id) => {
   const userURLs = {};
   for (const urlId in urlDatabase) {
